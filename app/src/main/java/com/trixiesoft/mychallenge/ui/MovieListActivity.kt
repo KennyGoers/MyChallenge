@@ -7,15 +7,15 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.trixiesoft.mychallenge.R
 import com.trixiesoft.mychallenge.api.FilmLocation
-import com.trixiesoft.mychallenge.api.FilmLocationAPI
 import com.trixiesoft.mychallenge.util.bindOptionalView
 import com.trixiesoft.mychallenge.util.bindView
 import com.trixiesoft.mychallenge.vm.MovieLocationListViewModel
@@ -62,11 +62,11 @@ class MovieListActivity : AppCompatActivity() {
             twoPane = true
         }
 
-        getDisposable = viewModel.getMovieLocations()
+        getDisposable = viewModel.getMovieLocationsByMovie()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, it, twoPane)
+                recyclerView.adapter = Adapter(it)
             }, {
                 Log.e("MovieListActivity", "", it)
             })
@@ -74,59 +74,91 @@ class MovieListActivity : AppCompatActivity() {
 
     private var getDisposable: Disposable? = null
 
-    class SimpleItemRecyclerViewAdapter(
-        private val parentActivity: MovieListActivity,
-        private val values: List<FilmLocation>,
-        private val twoPane: Boolean
-    ) :
-        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
-
-        private val onClickListener: View.OnClickListener
-
-        init {
-            onClickListener = View.OnClickListener { v ->
-                val item = v.tag as FilmLocation
-                if (twoPane) {
-                    val fragment = MovieDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putParcelable("film", item as Parcelable)
-                        }
-                    }
-                    parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.movie_detail_container, fragment)
-                        .commit()
-                } else {
-                    val intent = Intent(v.context, MovieDetailActivity::class.java).apply {
-                        putExtra("film", item as Parcelable)
-                    }
-                    v.context.startActivity(intent)
+    fun showFilmLocation(filmLocation: FilmLocation) {
+        if (twoPane) {
+            val fragment = MovieDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("film", filmLocation as Parcelable)
                 }
             }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.movie_detail_container, fragment)
+                .commit()
+        } else {
+            startActivity(Intent(this, MovieDetailActivity::class.java).apply {
+                putExtra("film", filmLocation as Parcelable)
+            })
+        }
+    }
+
+    private inner class Adapter(
+        private val values: LinkedHashMap<String, MutableList<FilmLocation>>
+    ) :
+        RecyclerView.Adapter<VH>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+            return VH(parent)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = values[position]
-            holder.title.text = "${item.title} (${item.releaseYear})"
-            holder.location.text = item.locations
-
-            with(holder.itemView) {
-                tag = item
-                setOnClickListener(onClickListener)
-            }
+        override fun onBindViewHolder(holder: VH, position: Int) {
+            // TODO: look into if this is not allocating a list just to get an indexible value
+            holder.bind(values.values.toList()[position])
         }
 
         override fun getItemCount() = values.size
+    }
 
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView by bindView(R.id.txtTitle)
-            val location: TextView by bindView(R.id.txtLocation)
+    private inner class VH(parent: ViewGroup):
+        RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)) {
+
+        val titleView: TextView by bindView(R.id.txtTitle)
+        val actorsView: TextView by bindView(R.id.txtActors)
+        val container: LinearLayout by bindView(R.id.container)
+        val expandImage: ImageView by bindView(R.id.expandImage)
+        var films: List<FilmLocation>? = null
+        val expanded: MutableSet<String> = mutableSetOf()
+
+        init {
+            itemView.setOnClickListener {
+                val id = films!!.first().id
+                if (expanded.contains(id))
+                    expanded.remove(id)
+                else
+                    expanded.add(id)
+                expandOrCollapse(true)
+            }
+        }
+
+        fun bind(films: List<FilmLocation>) {
+            this.films = films
+            films.first().apply {
+                titleView.text = "${title} (${releaseYear})"
+                actorsView.text = if (actor1.isNullOrBlank()) "Actors not specified" else actor1
+            }
+            expandOrCollapse(false)
+        }
+
+        fun expandOrCollapse(animate: Boolean) {
+            if (expanded.contains(films!!.first().id)) {
+                for (filmLocation in films!!) {
+                    val child = LayoutInflater.from(itemView.context)
+                        .inflate(R.layout.list_item_sub, itemView as ViewGroup, false)
+                    if (!filmLocation.locations.isNullOrBlank()) {
+                        // skip those film locations that are empty (bad data)
+                        (child as TextView).text = filmLocation.locations
+                        container.addView(child)
+                        child.tag = filmLocation
+                        child.setOnClickListener {
+                            showFilmLocation(it.tag as FilmLocation)
+                        }
+                        expandImage.setImageResource(R.drawable.ic_chevron_up)
+                    }
+                }
+            } else {
+                expandImage.setImageResource(R.drawable.ic_chevron_down)
+                container.removeAllViews()
+            }
         }
     }
 }

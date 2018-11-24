@@ -17,6 +17,7 @@ import com.trixiesoft.mychallenge.R
 import com.trixiesoft.mychallenge.api.FilmLocation
 import com.trixiesoft.mychallenge.util.Geocode
 import com.trixiesoft.mychallenge.util.bindView
+import com.trixiesoft.mychallenge.util.toSingleLine
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -53,6 +54,9 @@ class MovieDetailFragment : Fragment() {
     private val mapView: MapView by bindView(R.id.map_view)
     private val titleView: TextView by bindView(R.id.title_view)
     private val locationView: TextView by bindView(R.id.location_view)
+    private val producerView: TextView by bindView(R.id.director_view)
+    private val writerView: TextView by bindView(R.id.writer_view)
+    private val actorsView: TextView by bindView(R.id.actors_view)
     private var address: Address? = null
     private var map: GoogleMap? = null
 
@@ -65,7 +69,10 @@ class MovieDetailFragment : Fragment() {
         // Show the dummy content as text in a TextView.
         item?.let {
             titleView.text = "${it.title} (${it.releaseYear})"
-            locationView.text = it.locations
+            locationView.text = "${it.locations}"
+            producerView.text = if (it.director.isNullOrBlank()) "" else "Director: ${it.director}"
+            writerView.text = if (it.writer.isNullOrBlank()) "" else "Writer: ${it.director}"
+            actorsView.text = if (it.actor1.isNullOrBlank()) "" else "Starring: ${it.actor1}"
         }
 
         mapView.onCreate(savedInstanceState)
@@ -79,7 +86,6 @@ class MovieDetailFragment : Fragment() {
             //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerUs, ZOOM_CONTINENT))
             showMap()
         }
-
     }
 
     override fun onResume() {
@@ -93,12 +99,14 @@ class MovieDetailFragment : Fragment() {
                 .subscribe ({
                     // mapable address
                     address = it
+                    locationView.text = "${item!!.locations}\n${it.toSingleLine()}"
                     showMap()
                 }, {
                     Log.e("Movie Detail", "Error: ", it)
                     // error
                 }, {
                     // no address found for location
+                    locationView.text = "${item!!.locations}\nMap Location not found"
                     Log.e("Movie Detail", "No Address found " + item?.locations)
                 })
         }
@@ -129,3 +137,4 @@ class MovieDetailFragment : Fragment() {
         }
     }
 }
+

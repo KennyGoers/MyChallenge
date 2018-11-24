@@ -9,7 +9,7 @@ import io.reactivex.Single
 
 class MovieLocationListViewModel(@NonNull application: Application ): AndroidViewModel(application) {
 
-    fun getMovieLocations(): Single<List<FilmLocation>> {
+    private fun getMovieLocations(): Single<List<FilmLocation>> {
         return Single.defer {
             synchronized (filmLocationLock) {
                 if (filmLocations != null)
@@ -24,10 +24,10 @@ class MovieLocationListViewModel(@NonNull application: Application ): AndroidVie
     private var filmLocations: List<FilmLocation>? = null
     private val filmLocationLock: Any = Any()
 
-    fun getMoveLocationsByMovie(): Single<Map<String, List<FilmLocation>>> {
+    fun getMovieLocationsByMovie(): Single<LinkedHashMap<String, MutableList<FilmLocation>>> {
         return getMovieLocations()
             .map {
-                it.groupBy { it -> it.title }
+                it.groupByTo(LinkedHashMap()) { fl -> fl.title }
             }
     }
 }

@@ -8,23 +8,72 @@
         android:orientation="vertical"
         tools:context=".ui.MovieDetailFragment"
     >
-    <TextView
-        android:id="@+id/title_view"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        style="?android:attr/textAppearanceLarge"
-        android:textIsSelectable="true"
-        tools:text="Awesome Film Here"
-    />
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
     />
     <TextView
+        android:id="@+id/title_view"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textIsSelectable="true"
+        tools:text="Awesome Film Here"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+    />
+    <TextView
         android:id="@+id/location_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        tools:text="Kenny Goers\n1234 This Parkway"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+    />
+    <TextView
+        android:id="@+id/actors_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:lines="1"
+        tools:text="Kenny Goers"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:paddingTop="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+    />
+    <TextView
+        android:id="@+id/director_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:lines="1"
+        tools:text="Kenny Goers"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+    />
+    <TextView
+        android:id="@+id/writer_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:lines="1"
+        tools:text="Kenny Goers"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
     />
 </LinearLayout>
 

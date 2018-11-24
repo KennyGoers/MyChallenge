@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.trixiesoft.mychallenge.api.FilmLocation
 import com.trixiesoft.mychallenge.api.FilmLocationAPI
+import com.trixiesoft.mychallenge.vm.MovieLocationListViewModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -18,17 +19,7 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
 
-    @Before
-    fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        //db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        //db!!.close()
-    }
+    //val viewmodel by lazy { MovieLocationListViewModel(InstrumentationRegistry.getInstrumentation().targetContext) }
 
     @Test
     @Throws(Exception::class)
