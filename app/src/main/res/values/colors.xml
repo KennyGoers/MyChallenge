@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- define all the AndroidX Material colors -->
     <color name="primaryColor">#2e7d32</color>
     <color name="primaryLightColor">#60ad5e</color>
     <color name="primaryDarkColor">#005005</color>

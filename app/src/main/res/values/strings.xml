@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">San Fransisco Movies</string>
+    <string name="google_play_services_api_key"></string>
+    <string name="location_not_found">Location not found</string>
+    <string name="not_provided">Not Provided</string>
+    <string name="director">Director: %1$s</string>
+    <string name="writer">Writer: %1$s</string>
+    <string name="starring">Starring: %1$s</string>
+</resources>

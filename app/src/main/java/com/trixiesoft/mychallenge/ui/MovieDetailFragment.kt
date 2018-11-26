@@ -73,11 +73,19 @@ class MovieDetailFragment : Fragment() {
             titleView.text = "${it.title} (${it.releaseYear})"
             locationView.text = "${it.locations}"
             locationDetailView.text = ""
-            producerView.text = if (it.director.isNullOrBlank()) "" else "Director: ${it.director}"
-            writerView.text = if (it.writer.isNullOrBlank()) "" else "Writer: ${it.director}"
-            actorsView.text = if (it.actor1.isNullOrBlank()) "" else "Starring: ${it.actors()}"
+            producerView.text = getString(
+                R.string.director,
+                if (it.director.isNullOrBlank()) getString(R.string.not_provided) else it.director
+            )
+            writerView.text = getString(
+                R.string.writer,
+                if (it.writer.isNullOrBlank()) getString(R.string.not_provided) else it.writer
+            )
+            actorsView.text = getString(
+                R.string.starring,
+                if (it.actor1.isNullOrBlank()) getString(R.string.not_provided) else it.actors()
+            )
         }
-
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync { googleMap ->
             map = googleMap
@@ -109,7 +117,7 @@ class MovieDetailFragment : Fragment() {
                     // error
                 }, {
                     // no address found for location
-                    locationDetailView.text = "Map Location not found"
+                    locationDetailView.text = getString(R.string.location_not_found)
                     Log.e("Movie Detail", "No Address found " + item?.locations)
                 })
         }

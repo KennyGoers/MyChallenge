@@ -8,13 +8,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.HEAD
 import retrofit2.http.Headers
 
 class FilmLocationAPI {
     companion object {
         fun getFilmLocations(): Single<List<FilmLocation>> {
-            return FilmLocationAPI.instance.getLocationData()
+            return FilmLocationAPI.instance.getMovieLocationData()
                 .map{
                     val listResult = mutableListOf<FilmLocation>()
                     for (filmData in it.data) {
@@ -66,14 +65,27 @@ class FilmLocationAPI {
         // The Esoteric ugly end-pint
         @GET("https://data.sfgov.org/api/views/yitu-d5am/rows.json?accessType=DOWNLOAD")
         @Headers("X-App-Token: myUD0w8qkL29CCmzmq6DwyWLP")
-        fun getLocationData(): Single<FilmLocationData>
+        fun getMovieLocationData(): Single<FilmLocationData>
 
         // The nice clean endpoint :)
         @GET("https://data.sfgov.org/resource/wwmu-gmzc.json")
         @Headers("X-App-Token: myUD0w8qkL29CCmzmq6DwyWLP")
         fun getMovieLocations(): Single<MovieLocation>
-
     }
+
+    data class MovieLocation(
+        @SerializedName("actor_1") val actor1: String,
+        @SerializedName("actor_2") val actor2: String,
+        @SerializedName("actor_3") val actor3: String,
+        @SerializedName("director") val director: String,
+        @SerializedName("distributor") val distributor: String,
+        @SerializedName("fun_facts") val funFacts: String,
+        @SerializedName("locations") val locations: String,
+        @SerializedName("production_company") val productionCompany: String,
+        @SerializedName("release_year") val releaseYear: String,
+        @SerializedName("title") val title: String,
+        @SerializedName("writer") val writer: String
+    )
 
     data class FilmLocationData (
         @SerializedName("meta") val meta: Meta,

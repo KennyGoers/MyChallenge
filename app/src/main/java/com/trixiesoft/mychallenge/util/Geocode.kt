@@ -3,13 +3,15 @@ package com.trixiesoft.mychallenge.util
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.text.TextUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import io.reactivex.Maybe
 import java.io.IOException
 
 class Geocode {
+    // minimal wrapper for the builtin Android geocoder, uses a maybe, skips if more than one result
+    // I've experienced issues in the past when asking for only one result has very bad results
+    // if given time I'd score the results manually
     companion object {
         fun fromName(context: Context, addressString: String, bounds: LatLngBounds?): Maybe<Address> {
             return Maybe.defer {
@@ -50,6 +52,7 @@ class Geocode {
     }
 }
 
+// simple address simplification
 fun Address.toSingleLine(): String {
     val sb = StringBuilder()
     if (maxAddressLineIndex > -1) {
@@ -78,24 +81,4 @@ fun Address.toSingleLine(): String {
         sb.append(" ")
     }
     return sb.toString()
-}
-
-fun Address.name(): String {
-    if (!TextUtils.isEmpty(featureName))
-        return featureName
-    if (maxAddressLineIndex > 0) {
-        return getAddressLine(0)
-    }
-    if (locality != null) {
-        return locality
-    }
-    if (adminArea != null) {
-        return adminArea
-    }
-    if (countryCode != null) {
-        return countryCode
-    }
-    return if (postalCode != null) {
-        postalCode
-    } else "???"
 }

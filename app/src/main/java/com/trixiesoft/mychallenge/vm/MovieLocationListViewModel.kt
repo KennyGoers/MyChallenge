@@ -1,14 +1,13 @@
 package com.trixiesoft.mychallenge.vm
 
-import android.app.Application
-import androidx.annotation.NonNull
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.trixiesoft.mychallenge.api.FilmLocation
 import com.trixiesoft.mychallenge.api.FilmLocationAPI
 import io.reactivex.Single
 
-class MovieLocationListViewModel(@NonNull application: Application ): AndroidViewModel(application) {
+class MovieLocationListViewModel: ViewModel() {
 
+    // Simple cached/single load
     private fun getMovieLocations(): Single<List<FilmLocation>> {
         return Single.defer {
             synchronized (filmLocationLock) {
@@ -24,6 +23,7 @@ class MovieLocationListViewModel(@NonNull application: Application ): AndroidVie
     private var filmLocations: List<FilmLocation>? = null
     private val filmLocationLock: Any = Any()
 
+    // return an ordered map from the list grouped by title, title is enough for this data set to be unique
     fun getMovieLocationsByMovie(): Single<LinkedHashMap<String, MutableList<FilmLocation>>> {
         return getMovieLocations()
             .map {

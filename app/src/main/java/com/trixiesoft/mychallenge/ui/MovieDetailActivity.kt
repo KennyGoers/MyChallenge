@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 class MovieDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+        // used when not using element transitions
+        // overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
         setSupportActionBar(detail_toolbar)
@@ -35,7 +36,6 @@ class MovieDetailActivity : AppCompatActivity() {
                     putParcelable("film", filmLocation)
                 }
             }
-
             supportFragmentManager.beginTransaction()
                 .add(R.id.movie_detail_container, fragment)
                 .commit()
@@ -46,16 +46,14 @@ class MovieDetailActivity : AppCompatActivity() {
         when (item.itemId) {
             android.R.id.home -> {
                 NavUtils.navigateUpFromSameTask(this);
-                //navigateUpTo(Intent(this, MovieListActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
 
-
     override fun finish() {
         super.finish()
-        //supportFinishAfterTransition()
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
+        // used when not using element transitions
+        // overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
     }
 }

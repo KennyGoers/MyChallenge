@@ -5,8 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,36 +13,22 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.Nullable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProviders
-import android.util.Pair
+import androidx.recyclerview.widget.RecyclerView
 import com.trixiesoft.mychallenge.R
 import com.trixiesoft.mychallenge.api.FilmLocation
 import com.trixiesoft.mychallenge.api.actors
 import com.trixiesoft.mychallenge.util.bindOptionalView
 import com.trixiesoft.mychallenge.util.bindView
 import com.trixiesoft.mychallenge.vm.MovieLocationListViewModel
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [MovieDetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 class MovieListActivity : AppCompatActivity() {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private var twoPane: Boolean = false
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val detailContainer: FrameLayout? by bindOptionalView(R.id.movie_detail_container)
