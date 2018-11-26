@@ -1,5 +1,6 @@
 package com.trixiesoft.mychallenge.ui
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -7,15 +8,20 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProviders
+import android.util.Pair
 import com.trixiesoft.mychallenge.R
 import com.trixiesoft.mychallenge.api.FilmLocation
+import com.trixiesoft.mychallenge.api.actors
 import com.trixiesoft.mychallenge.util.bindOptionalView
 import com.trixiesoft.mychallenge.util.bindView
 import com.trixiesoft.mychallenge.vm.MovieLocationListViewModel
@@ -74,7 +80,7 @@ class MovieListActivity : AppCompatActivity() {
 
     private var getDisposable: Disposable? = null
 
-    fun showFilmLocation(filmLocation: FilmLocation) {
+    fun showFilmLocation(filmLocation: FilmLocation, options: ActivityOptions) {
         if (twoPane) {
             val fragment = MovieDetailFragment().apply {
                 arguments = Bundle().apply {
@@ -88,7 +94,7 @@ class MovieListActivity : AppCompatActivity() {
         } else {
             startActivity(Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("film", filmLocation as Parcelable)
-            })
+            }, options.toBundle())
         }
     }
 
@@ -134,7 +140,7 @@ class MovieListActivity : AppCompatActivity() {
             this.films = films
             films.first().apply {
                 titleView.text = "${title} (${releaseYear})"
-                actorsView.text = if (actor1.isNullOrBlank()) "Actors not specified" else actor1
+                actorsView.text = if (actor1.isNullOrBlank()) "Actors not specified" else "Starring: ${actors()}"
             }
             expandOrCollapse(false)
         }
@@ -150,7 +156,12 @@ class MovieListActivity : AppCompatActivity() {
                         container.addView(child)
                         child.tag = filmLocation
                         child.setOnClickListener {
-                            showFilmLocation(it.tag as FilmLocation)
+                            showFilmLocation(it.tag as FilmLocation,
+                                ActivityOptions.makeSceneTransitionAnimation(
+                                    this@MovieListActivity,
+                                    Pair.create<View, String>(it, "code-location"),
+                                    Pair.create<View, String>(titleView, "code-title"))
+                                )
                         }
                         expandImage.setImageResource(R.drawable.ic_chevron_up)
                     }

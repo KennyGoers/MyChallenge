@@ -15,24 +15,18 @@
             tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_play_services_api_key"/>
-        <!--
         <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="@string/google_play_services_api_key"
-        />
-        -->
-        <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"
         />
 
         <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
         <activity
-                android:name=".ui.MovieListActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:launchMode="singleTop"
+            android:name=".ui.MovieListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"
         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -40,12 +34,12 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".ui.MovieDetailActivity"
-                android:parentActivityName=".ui.MovieListActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name=".ui.MovieDetailActivity"
+            android:parentActivityName=".ui.MovieListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.trixiesoft.mychallenge.ui.MovieListActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.trixiesoft.mychallenge.ui.MovieListActivity"/>
         </activity>
     </application>
 

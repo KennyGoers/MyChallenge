@@ -22,7 +22,8 @@
         tools:text="Awesome Film Here"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-    />
+        android:transitionName="code-title"
+        />
     <TextView
         android:id="@+id/location_view"
         android:layout_width="wrap_content"
@@ -30,11 +31,24 @@
         android:duplicateParentState="true"
         android:layout_gravity="center_vertical"
         android:ellipsize="end"
-        tools:text="Kenny Goers\n1234 This Parkway"
+        tools:text="Kenny Goers"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-    />
+        android:transitionName="code-location"
+        />
+    <TextView
+        android:id="@+id/location_view_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        tools:text="1234 This Parkway"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        />
     <TextView
         android:id="@+id/actors_view"
         android:layout_width="wrap_content"
@@ -48,7 +62,8 @@
         android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-    />
+        android:transitionName="code-actors"
+        />
     <TextView
         android:id="@+id/director_view"
         android:layout_width="wrap_content"

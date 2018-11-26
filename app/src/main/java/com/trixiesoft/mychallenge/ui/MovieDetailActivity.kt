@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 class MovieDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
         setSupportActionBar(detail_toolbar)
@@ -50,4 +51,11 @@ class MovieDetailActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+
+
+    override fun finish() {
+        super.finish()
+        //supportFinishAfterTransition()
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
+    }
 }

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:orientation="horizontal"
-        android:background="?android:selectableItemBackground"
-        android:baselineAligned="false"
-        tools:text="In the big park"
-        android:gravity="center_vertical|start"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="42dp"
+    android:orientation="horizontal"
+    android:background="?android:selectableItemBackground"
+    android:baselineAligned="false"
+    android:transitionName="code-location"
+    tools:text="In the big park"
+    android:gravity="center_vertical|start"
 >
     <!--
     app:srcCompat="@drawable/ic_book_open_variant"

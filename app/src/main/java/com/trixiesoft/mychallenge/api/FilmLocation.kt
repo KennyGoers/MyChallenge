@@ -1,6 +1,7 @@
 package com.trixiesoft.mychallenge.api
 
 import android.os.Parcelable
+import android.view.accessibility.AccessibilityRecord
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -25,3 +26,15 @@ data class FilmLocation (
     val actor2: String?,
     val actor3: String?
 ): Parcelable
+
+fun FilmLocation.actors(): String? {
+    if (actor1.isNullOrBlank())
+        return "Not Specified"
+    var actors = actor1
+    if (actor2.isNullOrEmpty())
+        return actors
+    actors = "$actors, $actor2"
+    if (actor3.isNullOrEmpty())
+        return actors
+    return "$actors, $actor3"
+}

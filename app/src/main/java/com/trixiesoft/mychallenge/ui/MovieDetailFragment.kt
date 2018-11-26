@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker
 import com.trixiesoft.mychallenge.R
 import com.trixiesoft.mychallenge.api.FilmLocation
+import com.trixiesoft.mychallenge.api.actors
 import com.trixiesoft.mychallenge.util.Geocode
 import com.trixiesoft.mychallenge.util.bindView
 import com.trixiesoft.mychallenge.util.toSingleLine
@@ -54,6 +55,7 @@ class MovieDetailFragment : Fragment() {
     private val mapView: MapView by bindView(R.id.map_view)
     private val titleView: TextView by bindView(R.id.title_view)
     private val locationView: TextView by bindView(R.id.location_view)
+    private val locationDetailView: TextView by bindView(R.id.location_view_detail)
     private val producerView: TextView by bindView(R.id.director_view)
     private val writerView: TextView by bindView(R.id.writer_view)
     private val actorsView: TextView by bindView(R.id.actors_view)
@@ -70,21 +72,22 @@ class MovieDetailFragment : Fragment() {
         item?.let {
             titleView.text = "${it.title} (${it.releaseYear})"
             locationView.text = "${it.locations}"
+            locationDetailView.text = ""
             producerView.text = if (it.director.isNullOrBlank()) "" else "Director: ${it.director}"
             writerView.text = if (it.writer.isNullOrBlank()) "" else "Writer: ${it.director}"
-            actorsView.text = if (it.actor1.isNullOrBlank()) "" else "Starring: ${it.actor1}"
+            actorsView.text = if (it.actor1.isNullOrBlank()) "" else "Starring: ${it.actors()}"
         }
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync { googleMap ->
             map = googleMap
-
-            //googleMap.setMyLocationEnabled(true);
+            googleMap.setOnMapLoadedCallback {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(sanFransiscoBounds, 10))
+                showMap()
+            }
             googleMap.uiSettings.isZoomControlsEnabled = true
             googleMap.uiSettings.isMapToolbarEnabled = true
             googleMap.uiSettings.isZoomGesturesEnabled = true
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerUs, ZOOM_CONTINENT))
-            showMap()
         }
     }
 
@@ -99,14 +102,14 @@ class MovieDetailFragment : Fragment() {
                 .subscribe ({
                     // mapable address
                     address = it
-                    locationView.text = "${item!!.locations}\n${it.toSingleLine()}"
+                    locationDetailView.text = "${it.toSingleLine()}"
                     showMap()
                 }, {
                     Log.e("Movie Detail", "Error: ", it)
                     // error
                 }, {
                     // no address found for location
-                    locationView.text = "${item!!.locations}\nMap Location not found"
+                    locationDetailView.text = "Map Location not found"
                     Log.e("Movie Detail", "No Address found " + item?.locations)
                 })
         }
